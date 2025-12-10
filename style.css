@@ -1,0 +1,36 @@
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+body { background: #d1d7db; height: 100vh; overflow: hidden; }
+.screen { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; }
+.hidden { display: none !important; }
+
+/* Login */
+#login-screen { justify-content: center; align-items: center; background: #f0f2f5; z-index: 10; }
+.card { background: white; padding: 30px; border-radius: 10px; text-align: center; width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.card input { padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
+.card button { padding: 12px; background: #00a884; color: white; border: none; font-weight: bold; border-radius: 5px; cursor: pointer; }
+.badge { background: #e1f3fb; color: #00a884; padding: 5px; border-radius: 10px; font-size: 12px; align-self: center; }
+
+/* Chat */
+#chat-screen { background: #efe7dd; }
+.header { background: #008069; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; height: 60px; }
+.info { display: flex; align-items: center; gap: 10px; }
+.info img { width: 35px; height: 35px; border-radius: 50%; }
+.actions button { background: none; border: none; color: white; font-size: 18px; cursor: pointer; margin-left: 10px; }
+
+#messages-area { flex: 1; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); }
+
+.message { max-width: 75%; padding: 8px 12px; border-radius: 8px; font-size: 14px; box-shadow: 0 1px 1px rgba(0,0,0,0.1); word-wrap: break-word; }
+.my-msg { align-self: flex-end; background: #d9fdd3; }
+.their-msg { align-self: flex-start; background: white; }
+.sys-msg { align-self: center; background: #e1f3fb; padding: 5px 10px; border-radius: 10px; font-size: 12px; margin: 10px; }
+.time { font-size: 10px; color: gray; display: block; text-align: right; margin-top: 3px; }
+
+.input-area { background: #f0f2f5; padding: 10px; display: flex; align-items: center; gap: 10px; }
+#message-input { flex: 1; padding: 10px; border-radius: 20px; border: none; outline: none; }
+.input-area button, .input-area label { background: none; border: none; font-size: 20px; color: #54656f; cursor: pointer; }
+
+/* Features */
+.blur-img { filter: blur(10px); cursor: pointer; max-width: 200px; border-radius: 5px; }
+.unblur { filter: blur(0); }
+.recording { color: red !important; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Chat</title>
+    <!-- Icons and PDF Lib -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Emoji Lib -->
+    <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.4/dist/index.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen" class="screen">
+        <div class="card">
+            <i class="fa-brands fa-whatsapp fa-4x" style="color:#25D366;"></i>
+            <h2>Global Chat</h2>
+            <div class="badge"><span id="online-count">0</span> Online</div>
+            
+            <input type="text" id="username" placeholder="Name" maxlength="15">
+            <input type="number" id="age" placeholder="Age">
+            <input type="text" id="interests" placeholder="Interests (coding, music)">
+            
+            <button id="join-btn">START CHAT</button>
+            <p id="status-msg"></p>
+        </div>
+    </div>
+
+    <!-- CHAT SCREEN -->
+    <div id="chat-screen" class="screen hidden">
+        <div class="header">
+            <div class="info">
+                <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Avatar">
+                <div>
+                    <div id="partner-name" style="font-weight:bold;">Stranger</div>
+                    <div id="typing-indicator" class="hidden" style="font-size:12px; font-style:italic;">typing...</div>
+                </div>
+            </div>
+            <div class="actions">
+                <button id="report-btn" title="Report"><i class="fa-solid fa-flag" style="color:gold;"></i></button>
+                <button id="save-btn" title="Save PDF"><i class="fa-solid fa-download"></i></button>
+                <button id="skip-btn" title="Next"><i class="fa-solid fa-forward"></i></button>
+                <button id="end-btn" title="Exit"><i class="fa-solid fa-right-from-bracket" style="color:salmon;"></i></button>
+            </div>
+        </div>
+
+        <div id="messages-area">
+            <div class="sys-msg">Chat is end-to-end encrypted.</div>
+        </div>
+
+        <div class="input-area">
+            <button id="emoji-btn"><i class="fa-regular fa-face-smile"></i></button>
+            <label for="image-input"><i class="fa-solid fa-camera"></i></label>
+            <input type="file" id="image-input" hidden accept="image/*">
+            
+            <input type="text" id="message-input" placeholder="Type a message..." autocomplete="off">
+            
+            <button id="mic-btn"><i class="fa-solid fa-microphone"></i></button>
+            <button id="send-btn" style="color:#25D366;"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
