@@ -1,47 +1,121 @@
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
 body { background: #d1d7db; height: 100vh; overflow: hidden; }
 .screen { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; }
 .hidden { display: none !important; }
 
-/* Login */
-#login-screen { justify-content: center; align-items: center; background: #f0f2f5; z-index: 10; }
-.card { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-.card input, .card select { padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; background: white; }
-.card button { padding: 12px; background: #00a884; color: white; border: none; font-weight: bold; border-radius: 5px; cursor: pointer; }
-.badge { background: #e1f3fb; color: #00a884; padding: 5px; border-radius: 10px; font-size: 12px; align-self: center; }
+/* --- 0. UTILS --- */
+#connection-banner { 
+    background: #d32f2f; color: white; text-align: center; 
+    padding: 8px; position: absolute; top: 0; width: 100%; z-index: 300; font-size: 14px; 
+}
 
-/* Chat */
+#legal-modal { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.8); z-index: 500; display: flex; 
+    align-items: center; justify-content: center; 
+}
+.legal-content { 
+    background: white; padding: 25px; width: 90%; max-width: 600px; 
+    height: 80%; overflow-y: auto; border-radius: 10px; position: relative;
+    text-align: left; line-height: 1.6;
+}
+#close-legal {
+    position: sticky; bottom: 0; width: 100%; padding: 10px; margin-top: 10px;
+    background: #333; color: white; border: none; cursor: pointer;
+}
+
+/* --- 1. REJECTION & LANDING --- */
+#rejection-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: white; z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+}
+.cartoon-container { animation: shake 0.5s; }
+#rejection-emoji { font-size: 100px; display: block; margin-bottom: 20px; }
+#rejection-text { font-size: 28px; color: #d32f2f; margin-bottom: 10px; }
+@keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } 100% { transform: translateX(0); } }
+
+#landing-screen {
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    overflow-y: auto; align-items: center; padding: 20px;
+}
+.wide-container {
+    background: white; width: 100%; max-width: 900px; 
+    border-radius: 15px; padding: 30px; box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    display: flex; flex-direction: column; gap: 20px; position: relative; margin-top: 40px;
+}
+.landing-header { text-align: center; border-bottom: 2px solid #eee; padding-bottom: 20px; }
+.landing-header h1 { color: #2c3e50; font-size: 2.2rem; }
+.landing-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
+
+/* Rules */
+.rules-section h3 { color: #008069; margin-bottom: 15px; }
+.rules-list { list-style: none; padding: 15px; border-radius: 8px; background: #f9f9f9; }
+.rules-list li { margin-bottom: 10px; font-size: 14px; color: #555; display: flex; align-items: center; gap: 10px; }
+.rules-list i { color: #00a884; }
+
+/* Ads */
+.ad-section { display: flex; flex-direction: column; align-items: center; }
+.big-ad-slot {
+    width: 300px; height: 250px; background: #fff9c4; border: 2px dashed #fbc02d;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: #f57f17; font-weight: bold; border-radius: 10px; margin-bottom: 20px;
+}
+.ad-subtext { font-size: 10px; margin-top: 5px; opacity: 0.6; }
+
+/* Verification */
+.verification-area { background: #f0f2f5; padding: 15px; border-radius: 10px; text-align: center; margin-top: 20px; }
+.checkbox-container { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 15px; cursor: pointer; margin-bottom: 10px; }
+#enter-site-btn {
+    width: 100%; padding: 15px; background: #e74c3c; color: white;
+    border: none; border-radius: 8px; font-size: 18px; font-weight: bold;
+    cursor: pointer; transition: transform 0.2s;
+}
+#enter-site-btn:hover { background: #c0392b; transform: scale(1.02); }
+
+/* Footer */
+.contact-info { text-align: center; font-size: 12px; color: #888; border-top: 1px solid #eee; padding-top: 15px; }
+.footer { text-align: center; font-size: 12px; color: #aaa; margin-top: 5px; }
+.footer-links a { color: #008069; text-decoration: none; margin: 0 5px; cursor: pointer; }
+
+/* --- 2. LOGIN & CHAT --- */
+#login-screen { justify-content: center; align-items: center; background: #f0f2f5; z-index: 10; }
+.login-card-expanded {
+    background: white; padding: 30px; border-radius: 10px;
+    width: 90%; max-width: 500px; display: flex; flex-direction: column; gap: 15px; text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.banner-ad-slot {
+    width: 100%; height: 80px; background: #fff9c4; border: 2px dashed #fbc02d;
+    display: flex; align-items: center; justify-content: center; color: #f57f17; font-weight: bold;
+}
+.form-grid { display: flex; gap: 10px; }
+.login-card-expanded input, .login-card-expanded select { padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; width: 100%; }
+#join-btn { padding: 15px; background: #00a884; color: white; border: none; font-weight: bold; border-radius: 5px; cursor: pointer; }
+
 #chat-screen { background: #efe7dd; }
 .header { background: #008069; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; height: 60px; }
 .info { display: flex; align-items: center; gap: 10px; }
 .info img { width: 35px; height: 35px; border-radius: 50%; }
-#typing-indicator { font-size: 12px; font-style: italic; opacity: 0.8; }
 .actions button { background: none; border: none; color: white; font-size: 18px; cursor: pointer; margin-left: 10px; }
 
 #messages-area { flex: 1; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); }
 
-/* Message Styles */
 .message { max-width: 75%; padding: 6px 10px; border-radius: 8px; font-size: 14.2px; box-shadow: 0 1px 1px rgba(0,0,0,0.1); word-wrap: break-word; display: flex; flex-direction: column; }
 .my-msg { align-self: flex-end; background: #d9fdd3; }
 .their-msg { align-self: flex-start; background: white; }
 .sys-msg { align-self: center; background: #e1f3fb; padding: 5px 10px; border-radius: 10px; font-size: 12px; margin: 10px; }
-
-/* Time & Ticks */
 .msg-meta { display: flex; justify-content: flex-end; align-items: center; gap: 4px; margin-top: 2px; margin-left: 10px; float: right; }
 .msg-time { font-size: 10px; color: #667781; }
-.tick { font-size: 10px; color: #53bdeb; } /* Blue Ticks */
+.tick { font-size: 10px; color: #53bdeb; }
 
-/* Input */
 .input-area { background: #f0f2f5; padding: 10px; display: flex; align-items: center; gap: 10px; position: relative; }
 #message-input { flex: 1; padding: 10px; border-radius: 20px; border: none; outline: none; }
 .input-area button, .input-area label { background: none; border: none; font-size: 20px; color: #54656f; cursor: pointer; }
 
-/* Emoji Picker */
 #emoji-picker { position: absolute; bottom: 70px; left: 10px; background: white; padding: 10px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; font-size: 24px; cursor: pointer; z-index: 20; }
-#emoji-picker span:hover { transform: scale(1.2); }
-
-/* Features */
 .blur-img { filter: blur(10px); cursor: pointer; max-width: 200px; border-radius: 5px; }
 .unblur { filter: blur(0); }
 .recording { color: red !important; animation: pulse 1s infinite; }
-@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+@media (max-width: 700px) { .landing-grid { grid-template-columns: 1fr; } .ad-section { order: -1; } }
