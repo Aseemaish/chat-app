@@ -1,6 +1,5 @@
 const socket = io();
 
-// UI Elements
 const els = {
     login: document.getElementById('login-screen'),
     chat: document.getElementById('chat-screen'),
@@ -10,82 +9,155 @@ const els = {
     txtInput: document.getElementById('message-input'),
     imgInput: document.getElementById('image-input'),
     micBtn: document.getElementById('mic-btn'),
+    emojiBtn: document.getElementById('emoji-btn'),
+    picker: document.getElementById('emoji-picker'),
     skipBtn: document.getElementById('skip-btn'),
     endBtn: document.getElementById('end-btn'),
     reportBtn: document.getElementById('report-btn'),
     saveBtn: document.getElementById('save-btn'),
     status: document.getElementById('status-msg'),
     online: document.getElementById('online-count'),
-    pName: document.getElementById('partner-name'),
+    pName: document.getElementById('partner-name'), // This is the header name
     typing: document.getElementById('typing-indicator'),
     inputs: {
         name: document.getElementById('username'),
         age: document.getElementById('age'),
+        country: document.getElementById('country'),
         interests: document.getElementById('interests')
     }
 };
 
 let currentRoom = null;
 
-// 1. INITIALIZE EMOJI PICKER (Safe Mode)
-try {
-    const picker = new EmojiButton();
-    const emojiBtn = document.getElementById('emoji-btn');
-    picker.on('emoji', s => els.txtInput.value += s.emoji);
-    emojiBtn.addEventListener('click', () => picker.togglePicker(emojiBtn));
-} catch(e) { console.log("Emoji lib not loaded"); }
+// 1. EMOJI
+els.emojiBtn.addEventListener('click', () => els.picker.classList.toggle('hidden'));
+els.picker.querySelectorAll('span').forEach(span => {
+    span.addEventListener('click', () => {
+        els.txtInput.value += span.innerText;
+        els.picker.classList.add('hidden');
+        els.txtInput.focus();
+    });
+});
 
-// 2. SOCKET EVENTS
+// 2. LOGIN
 socket.on('online_count', c => els.online.innerText = c);
 
-// Login Logic
 els.joinBtn.addEventListener('click', () => {
     const name = els.inputs.name.value;
     const age = els.inputs.age.value;
+    const country = els.inputs.country.value;
     const ints = els.inputs.interests.value.split(',').map(s=>s.trim()).filter(s=>s);
 
-    if(!name || !age) return alert("Name and Age required!");
+    if(!name || !age) return alert("Please fill Name and Age");
+    if(country === "🌍") return alert("Please select a Country");
 
-    socket.emit('user_login', { name, age, interests: ints });
+    socket.emit('user_login', { name, age, country, interests: ints });
     els.status.innerText = "Connecting...";
     els.joinBtn.disabled = true;
 });
 
-// Chat Started
+// 3. CHAT START (Fixing the Flag Issue)
 socket.on('chat_start', (data) => {
     currentRoom = data.room;
     els.login.classList.add('hidden');
     els.chat.classList.remove('hidden');
     els.msgs.innerHTML = '';
-    addSysMsg("Matched! Say Hello.");
+    
+    // UPDATE HEADER WITH FLAG
+    els.pName.innerText = `${data.partner.country} ${data.partner.name}`;
+    
+    addSysMsg("Encryption active. Say Hello!");
 });
 
 socket.on('system_message', msg => {
     addSysMsg(msg);
-    if(msg.includes('Matched:')) els.pName.innerText = msg.split(':')[1].split('(')[0];
 });
 
-// Messaging
+// 4. MESSAGING (Fixing Time & Ticks)
 els.sendBtn.addEventListener('click', sendText);
 els.txtInput.addEventListener('keypress', e => { if(e.key==='Enter') sendText() });
 
 function sendText() {
     const txt = els.txtInput.value;
     if(txt.trim() && currentRoom) {
-        addMsg(txt, 'my-msg');
+        addMsg(txt, 'my-msg'); // Add to my screen
         socket.emit('send_message', { room: currentRoom, message: txt });
         els.txtInput.value = '';
     }
 }
 
-// Receive Data
 socket.on('receive_message', data => {
-    if(data.type === 'text') addMsg(data.content, 'their-msg', data.time);
-    if(data.type === 'image') addImg(data.content, 'their-msg', data.time);
+    if(data.type === 'text') addMsg(data.content, 'their-msg');
+    if(data.type === 'image') addImg(data.content, 'their-msg');
     if(data.type === 'audio') addAudio(data.content, 'their-msg');
 });
 
-// Typing Indicator
+// 5. HELPER FUNCTIONS (Formatting Time & Ticks)
+
+// Get Current Time formatted nicely (e.g. "10:30 PM")
+function getCurrentTime() {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function addMsg(txt, cls) {
+    const d = document.createElement('div');
+    d.className = `message ${cls}`;
+    
+    // Add Double Tick only for MY messages
+    const tickHtml = cls === 'my-msg' ? '<i class="fa-solid fa-check-double tick"></i>' : '';
+    
+    d.innerHTML = `
+        <span>${txt}</span>
+        <div class="msg-meta">
+            <span class="msg-time">${getCurrentTime()}</span>
+            ${tickHtml}
+        </div>
+    `;
+    els.msgs.appendChild(d);
+    els.msgs.scrollTop = els.msgs.scrollHeight;
+}
+
+function addImg(src, cls) {
+    const d = document.createElement('div');
+    d.className = `message ${cls}`;
+    const tickHtml = cls === 'my-msg' ? '<i class="fa-solid fa-check-double tick"></i>' : '';
+    
+    d.innerHTML = `
+        <img src="${src}" class="blur-img" onclick="this.classList.toggle('unblur')">
+        <div class="msg-meta">
+            <span class="msg-time">${getCurrentTime()}</span>
+            ${tickHtml}
+        </div>
+    `;
+    els.msgs.appendChild(d);
+    els.msgs.scrollTop = els.msgs.scrollHeight;
+}
+
+function addAudio(url, cls) {
+    const d = document.createElement('div');
+    d.className = `message ${cls}`;
+    const tickHtml = cls === 'my-msg' ? '<i class="fa-solid fa-check-double tick"></i>' : '';
+    
+    d.innerHTML = `
+        <audio controls src="${url}"></audio>
+        <div class="msg-meta">
+            <span class="msg-time">${getCurrentTime()}</span>
+            ${tickHtml}
+        </div>
+    `;
+    els.msgs.appendChild(d);
+    els.msgs.scrollTop = els.msgs.scrollHeight;
+}
+
+function addSysMsg(txt) {
+    const d = document.createElement('div');
+    d.className = 'sys-msg';
+    d.innerText = txt;
+    els.msgs.appendChild(d);
+    els.msgs.scrollTop = els.msgs.scrollHeight;
+}
+
+// 6. OTHER EVENTS
 els.txtInput.addEventListener('input', () => {
     if(currentRoom) socket.emit('typing');
     setTimeout(() => socket.emit('stop_typing'), 1000);
@@ -98,8 +170,7 @@ socket.on('partner_left', () => {
     els.pName.innerText = "Disconnected";
 });
 
-// 3. MEDIA FEATURES
-// Image
+// Image Input
 els.imgInput.addEventListener('change', function() {
     const file = this.files[0];
     if(file && currentRoom) {
@@ -112,7 +183,7 @@ els.imgInput.addEventListener('change', function() {
     }
 });
 
-// Voice
+// Voice Input
 let mediaRecorder, chunks = [];
 els.micBtn.addEventListener('mousedown', async () => {
     try {
@@ -129,7 +200,6 @@ els.micBtn.addEventListener('mousedown', async () => {
         els.micBtn.classList.add('recording');
     } catch(e) { alert("Mic access denied"); }
 });
-
 els.micBtn.addEventListener('mouseup', () => {
     if(mediaRecorder && mediaRecorder.state !== 'inactive') {
         mediaRecorder.stop();
@@ -137,13 +207,12 @@ els.micBtn.addEventListener('mouseup', () => {
     }
 });
 
-// 4. BUTTON ACTIONS
+// Buttons
 els.skipBtn.addEventListener('click', () => {
     socket.emit('skip_partner');
     els.msgs.innerHTML = '';
     addSysMsg("Skipped. Searching...");
 });
-
 els.endBtn.addEventListener('click', () => {
     socket.emit('leave_chat');
     els.chat.classList.add('hidden');
@@ -151,41 +220,5 @@ els.endBtn.addEventListener('click', () => {
     els.joinBtn.disabled = false;
     els.status.innerText = "";
 });
-
-els.reportBtn.addEventListener('click', () => {
-    if(confirm("Report User?")) socket.emit('report_partner');
-});
-
-els.saveBtn.addEventListener('click', () => {
-    html2pdf().from(els.msgs).save("chat.pdf");
-});
-
-// Helpers
-function addMsg(txt, cls, time = '') {
-    const d = document.createElement('div');
-    d.className = `message ${cls}`;
-    d.innerHTML = `<span>${txt}</span><span class="time">${time}</span>`;
-    els.msgs.appendChild(d);
-    els.msgs.scrollTop = els.msgs.scrollHeight;
-}
-function addImg(src, cls, time = '') {
-    const d = document.createElement('div');
-    d.className = `message ${cls}`;
-    d.innerHTML = `<img src="${src}" class="blur-img" onclick="this.classList.toggle('unblur')"><span class="time">${time}</span>`;
-    els.msgs.appendChild(d);
-    els.msgs.scrollTop = els.msgs.scrollHeight;
-}
-function addAudio(url, cls) {
-    const d = document.createElement('div');
-    d.className = `message ${cls}`;
-    d.innerHTML = `<audio controls src="${url}"></audio>`;
-    els.msgs.appendChild(d);
-    els.msgs.scrollTop = els.msgs.scrollHeight;
-}
-function addSysMsg(txt) {
-    const d = document.createElement('div');
-    d.className = 'sys-msg';
-    d.innerText = txt;
-    els.msgs.appendChild(d);
-    els.msgs.scrollTop = els.msgs.scrollHeight;
-}
+els.reportBtn.addEventListener('click', () => { if(confirm("Report User?")) socket.emit('report_partner'); });
+els.saveBtn.addEventListener('click', () => { html2pdf().from(els.msgs).save("chat.pdf"); });
