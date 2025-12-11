@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
             id: socket.id,
             name: data.name,
             age: parseInt(data.age),
-            country: data.country || "🌍", // Store the manual country selection
+            country: data.country || "🌍",
             interests: data.interests || [],
             room: null
         };
@@ -69,7 +69,7 @@ io.on('connection', (socket) => {
             socket.userData.room = roomName;
             partner.userData.room = roomName;
 
-            // --- KEY FIX: Send Correct Partner Details to Each User ---
+            // Send Partner Details
             io.to(socket.id).emit('chat_start', { 
                 room: roomName, 
                 partner: { name: partner.userData.name, country: partner.userData.country } 
@@ -80,7 +80,7 @@ io.on('connection', (socket) => {
                 partner: { name: socket.userData.name, country: socket.userData.country } 
             });
             
-            // System Messages (Backup)
+            // System Messages
             socket.emit('system_message', `Matched with: ${partner.userData.country} ${partner.userData.name}`);
             partner.emit('system_message', `Matched with: ${socket.userData.country} ${socket.userData.name}`);
         } else {
@@ -93,10 +93,7 @@ io.on('connection', (socket) => {
     socket.on('send_message', (data) => {
         if(!socket.userData.room) return;
         let clean = filter ? filter.clean(data.message) : data.message;
-        
-        socket.to(socket.userData.room).emit('receive_message', {
-            type: 'text', content: clean
-        });
+        socket.to(socket.userData.room).emit('receive_message', { type: 'text', content: clean });
     });
 
     socket.on('send_image', (data) => {
@@ -116,10 +113,10 @@ io.on('connection', (socket) => {
         if(socket.userData.room) socket.to(socket.userData.room).emit('partner_stop_typing');
     });
 
-    // --- DISCONNECTS ---
+    // --- ACTIONS ---
     socket.on('skip_partner', () => { cleanup(socket); findMatch(socket); });
     socket.on('leave_chat', () => { cleanup(socket); });
-    socket.on('report_partner', () => { socket.emit('system_message', 'User reported.'); });
+    socket.on('report_partner', () => { socket.emit('system_message', 'User reported to admin.'); });
 
     socket.on('disconnect', () => {
         cleanup(socket);
