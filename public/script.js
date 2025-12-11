@@ -17,7 +17,7 @@ const els = {
     saveBtn: document.getElementById('save-btn'),
     status: document.getElementById('status-msg'),
     online: document.getElementById('online-count'),
-    pName: document.getElementById('partner-name'), // This is the header name
+    pName: document.getElementById('partner-name'), 
     typing: document.getElementById('typing-indicator'),
     inputs: {
         name: document.getElementById('username'),
@@ -56,14 +56,14 @@ els.joinBtn.addEventListener('click', () => {
     els.joinBtn.disabled = true;
 });
 
-// 3. CHAT START (Fixing the Flag Issue)
+// 3. CHAT START (Fixed Flag & Name)
 socket.on('chat_start', (data) => {
     currentRoom = data.room;
     els.login.classList.add('hidden');
     els.chat.classList.remove('hidden');
     els.msgs.innerHTML = '';
     
-    // UPDATE HEADER WITH FLAG
+    // UPDATE HEADER
     els.pName.innerText = `${data.partner.country} ${data.partner.name}`;
     
     addSysMsg("Encryption active. Say Hello!");
@@ -73,14 +73,14 @@ socket.on('system_message', msg => {
     addSysMsg(msg);
 });
 
-// 4. MESSAGING (Fixing Time & Ticks)
+// 4. MESSAGING
 els.sendBtn.addEventListener('click', sendText);
 els.txtInput.addEventListener('keypress', e => { if(e.key==='Enter') sendText() });
 
 function sendText() {
     const txt = els.txtInput.value;
     if(txt.trim() && currentRoom) {
-        addMsg(txt, 'my-msg'); // Add to my screen
+        addMsg(txt, 'my-msg');
         socket.emit('send_message', { room: currentRoom, message: txt });
         els.txtInput.value = '';
     }
@@ -92,9 +92,7 @@ socket.on('receive_message', data => {
     if(data.type === 'audio') addAudio(data.content, 'their-msg');
 });
 
-// 5. HELPER FUNCTIONS (Formatting Time & Ticks)
-
-// Get Current Time formatted nicely (e.g. "10:30 PM")
+// 5. HELPER FUNCTIONS (Time & Ticks)
 function getCurrentTime() {
     return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
@@ -102,17 +100,8 @@ function getCurrentTime() {
 function addMsg(txt, cls) {
     const d = document.createElement('div');
     d.className = `message ${cls}`;
-    
-    // Add Double Tick only for MY messages
     const tickHtml = cls === 'my-msg' ? '<i class="fa-solid fa-check-double tick"></i>' : '';
-    
-    d.innerHTML = `
-        <span>${txt}</span>
-        <div class="msg-meta">
-            <span class="msg-time">${getCurrentTime()}</span>
-            ${tickHtml}
-        </div>
-    `;
+    d.innerHTML = `<span>${txt}</span><div class="msg-meta"><span class="msg-time">${getCurrentTime()}</span>${tickHtml}</div>`;
     els.msgs.appendChild(d);
     els.msgs.scrollTop = els.msgs.scrollHeight;
 }
@@ -121,14 +110,7 @@ function addImg(src, cls) {
     const d = document.createElement('div');
     d.className = `message ${cls}`;
     const tickHtml = cls === 'my-msg' ? '<i class="fa-solid fa-check-double tick"></i>' : '';
-    
-    d.innerHTML = `
-        <img src="${src}" class="blur-img" onclick="this.classList.toggle('unblur')">
-        <div class="msg-meta">
-            <span class="msg-time">${getCurrentTime()}</span>
-            ${tickHtml}
-        </div>
-    `;
+    d.innerHTML = `<img src="${src}" class="blur-img" onclick="this.classList.toggle('unblur')"><div class="msg-meta"><span class="msg-time">${getCurrentTime()}</span>${tickHtml}</div>`;
     els.msgs.appendChild(d);
     els.msgs.scrollTop = els.msgs.scrollHeight;
 }
@@ -137,14 +119,7 @@ function addAudio(url, cls) {
     const d = document.createElement('div');
     d.className = `message ${cls}`;
     const tickHtml = cls === 'my-msg' ? '<i class="fa-solid fa-check-double tick"></i>' : '';
-    
-    d.innerHTML = `
-        <audio controls src="${url}"></audio>
-        <div class="msg-meta">
-            <span class="msg-time">${getCurrentTime()}</span>
-            ${tickHtml}
-        </div>
-    `;
+    d.innerHTML = `<audio controls src="${url}"></audio><div class="msg-meta"><span class="msg-time">${getCurrentTime()}</span>${tickHtml}</div>`;
     els.msgs.appendChild(d);
     els.msgs.scrollTop = els.msgs.scrollHeight;
 }
@@ -157,7 +132,7 @@ function addSysMsg(txt) {
     els.msgs.scrollTop = els.msgs.scrollHeight;
 }
 
-// 6. OTHER EVENTS
+// 6. TYPING
 els.txtInput.addEventListener('input', () => {
     if(currentRoom) socket.emit('typing');
     setTimeout(() => socket.emit('stop_typing'), 1000);
@@ -170,7 +145,7 @@ socket.on('partner_left', () => {
     els.pName.innerText = "Disconnected";
 });
 
-// Image Input
+// 7. MEDIA (Fixed Voice)
 els.imgInput.addEventListener('change', function() {
     const file = this.files[0];
     if(file && currentRoom) {
@@ -183,9 +158,12 @@ els.imgInput.addEventListener('change', function() {
     }
 });
 
-// Voice Input
 let mediaRecorder, chunks = [];
-els.micBtn.addEventListener('mousedown', async () => {
+
+// Handle Desktop (Mouse) & Mobile (Touch)
+const startRecord = async (e) => {
+    if(e.type === 'mousedown' && e.button !== 0) return; // Only left click
+    e.preventDefault(); 
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         mediaRecorder = new MediaRecorder(stream);
@@ -198,16 +176,27 @@ els.micBtn.addEventListener('mousedown', async () => {
         };
         mediaRecorder.start();
         els.micBtn.classList.add('recording');
-    } catch(e) { alert("Mic access denied"); }
-});
-els.micBtn.addEventListener('mouseup', () => {
+    } catch(err) {
+        alert("Microphone denied. Please check browser permissions.");
+    }
+};
+
+const stopRecord = (e) => {
+    e.preventDefault();
     if(mediaRecorder && mediaRecorder.state !== 'inactive') {
         mediaRecorder.stop();
         els.micBtn.classList.remove('recording');
     }
-});
+};
 
-// Buttons
+// Add listeners for both mouse and touch
+els.micBtn.addEventListener('mousedown', startRecord);
+els.micBtn.addEventListener('mouseup', stopRecord);
+els.micBtn.addEventListener('touchstart', startRecord);
+els.micBtn.addEventListener('touchend', stopRecord);
+
+
+// 8. BUTTONS
 els.skipBtn.addEventListener('click', () => {
     socket.emit('skip_partner');
     els.msgs.innerHTML = '';
