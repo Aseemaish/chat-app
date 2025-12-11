@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Global Chat</title>
-    <!-- Icons and PDF Lib -->
+    <!-- Icons and PDF Library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- Emoji Lib -->
-    <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.4/dist/index.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,9 +18,23 @@
             <h2>Global Chat</h2>
             <div class="badge"><span id="online-count">0</span> Online</div>
             
-            <input type="text" id="username" placeholder="Name" maxlength="15">
+            <input type="text" id="username" placeholder="Your Name" maxlength="15">
             <input type="number" id="age" placeholder="Age">
-            <input type="text" id="interests" placeholder="Interests (coding, music)">
+            
+            <!-- CRUCIAL: The script needs this ID="country" -->
+            <select id="country">
+                <option value="🌍">Select Country</option>
+                <option value="🇮🇳">India 🇮🇳</option>
+                <option value="🇺🇸">USA 🇺🇸</option>
+                <option value="🇬🇧">UK 🇬🇧</option>
+                <option value="🇨🇦">Canada 🇨🇦</option>
+                <option value="🇦🇺">Australia 🇦🇺</option>
+                <option value="🇩🇪">Germany 🇩🇪</option>
+                <option value="🇧🇷">Brazil 🇧🇷</option>
+                <option value="🏳️">Other</option>
+            </select>
+
+            <input type="text" id="interests" placeholder="Interests (e.g., cricket, coding)">
             
             <button id="join-btn">START CHAT</button>
             <p id="status-msg"></p>
@@ -35,20 +47,28 @@
             <div class="info">
                 <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Avatar">
                 <div>
+                    <!-- The script needs this ID="partner-name" -->
                     <div id="partner-name" style="font-weight:bold;">Stranger</div>
-                    <div id="typing-indicator" class="hidden" style="font-size:12px; font-style:italic;">typing...</div>
+                    <div id="typing-indicator" class="hidden">typing...</div>
                 </div>
             </div>
             <div class="actions">
-                <button id="report-btn" title="Report"><i class="fa-solid fa-flag" style="color:gold;"></i></button>
-                <button id="save-btn" title="Save PDF"><i class="fa-solid fa-download"></i></button>
-                <button id="skip-btn" title="Next"><i class="fa-solid fa-forward"></i></button>
-                <button id="end-btn" title="Exit"><i class="fa-solid fa-right-from-bracket" style="color:salmon;"></i></button>
+                <button id="report-btn"><i class="fa-solid fa-flag" style="color:gold;"></i></button>
+                <button id="save-btn"><i class="fa-solid fa-download"></i></button>
+                <button id="skip-btn"><i class="fa-solid fa-forward"></i></button>
+                <button id="end-btn"><i class="fa-solid fa-right-from-bracket" style="color:salmon;"></i></button>
             </div>
         </div>
 
         <div id="messages-area">
-            <div class="sys-msg">Chat is end-to-end encrypted.</div>
+            <div class="sys-msg">Encryption active. Say Hi!</div>
+        </div>
+
+        <!-- The script needs this ID="emoji-picker" -->
+        <div id="emoji-picker" class="hidden">
+            <span>😀</span><span>😂</span><span>🤣</span><span>❤️</span><span>😍</span>
+            <span>😭</span><span>😡</span><span>👍</span><span>👎</span><span>🔥</span>
+            <span>🎉</span><span>💀</span><span>🤡</span><span>👀</span><span>💩</span>
         </div>
 
         <div class="input-area">
@@ -56,7 +76,7 @@
             <label for="image-input"><i class="fa-solid fa-camera"></i></label>
             <input type="file" id="image-input" hidden accept="image/*">
             
-            <input type="text" id="message-input" placeholder="Type a message..." autocomplete="off">
+            <input type="text" id="message-input" placeholder="Message..." autocomplete="off">
             
             <button id="mic-btn"><i class="fa-solid fa-microphone"></i></button>
             <button id="send-btn" style="color:#25D366;"><i class="fa-solid fa-paper-plane"></i></button>
