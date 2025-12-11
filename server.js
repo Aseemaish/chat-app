@@ -9,7 +9,7 @@ try { filter = require('leo-profanity'); } catch(e) {}
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, { maxHttpBufferSize: 1e7 });
+const io = new Server(server, { maxHttpBufferSize: 1e7 }); // 10MB limit
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
             id: socket.id,
             name: data.name,
             age: parseInt(data.age),
-            country: data.country || "🌍",
+            country: data.country || "🌍", // Store the manual country selection
             interests: data.interests || [],
             room: null
         };
@@ -69,7 +69,7 @@ io.on('connection', (socket) => {
             socket.userData.room = roomName;
             partner.userData.room = roomName;
 
-            // --- KEY FIX: Send Partner Details to Both ---
+            // --- KEY FIX: Send Correct Partner Details to Each User ---
             io.to(socket.id).emit('chat_start', { 
                 room: roomName, 
                 partner: { name: partner.userData.name, country: partner.userData.country } 
@@ -80,9 +80,9 @@ io.on('connection', (socket) => {
                 partner: { name: socket.userData.name, country: socket.userData.country } 
             });
             
-            // System Messages
-            socket.emit('system_message', `Matched with: ${partner.userData.country} ${partner.userData.name} (${partner.userData.age})`);
-            partner.emit('system_message', `Matched with: ${socket.userData.country} ${socket.userData.name} (${socket.userData.age})`);
+            // System Messages (Backup)
+            socket.emit('system_message', `Matched with: ${partner.userData.country} ${partner.userData.name}`);
+            partner.emit('system_message', `Matched with: ${socket.userData.country} ${socket.userData.name}`);
         } else {
             waitingUsers.push(socket);
             socket.emit('status', 'Searching for a partner...');
@@ -94,7 +94,6 @@ io.on('connection', (socket) => {
         if(!socket.userData.room) return;
         let clean = filter ? filter.clean(data.message) : data.message;
         
-        // Send Raw Content. Client will handle Time.
         socket.to(socket.userData.room).emit('receive_message', {
             type: 'text', content: clean
         });
