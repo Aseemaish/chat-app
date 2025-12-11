@@ -2,26 +2,133 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Chat</title>
-    <!-- Icons and PDF Library -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- PRIMARY SEO -->
+    <title>Global Chat - Talk to Strangers | Free Omegle Alternative</title>
+    <meta name="description" content="Start chatting instantly with random strangers worldwide. No login, 100% anonymous, safe, and free. The best text-only Omegle alternative in 2025.">
+    <meta name="keywords" content="anonymous chat, stranger chat, talk to strangers, random chat, omegle alternative, text chat, global chat, chat online">
+    <meta name="author" content="Aseem Aishwarya">
+    <meta name="robots" content="index, follow"> <!-- Tells Google to scan this site -->
+
+    <!-- OPEN GRAPH / FACEBOOK / WHATSAPP (Makes shared links look good) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://global-chat-app.onrender.com/">
+    <meta property="og:title" content="Global Chat - Connect with Strangers">
+    <meta property="og:description" content="Met a stranger lately? Join thousands of users in anonymous, encrypted chats. No login required.">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/1041/1041916.png"> <!-- Preview Image -->
+
+    <!-- TWITTER -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://global-chat-app.onrender.com/">
+    <meta property="twitter:title" content="Global Chat - Anonymous Stranger Chat">
+    <meta property="twitter:description" content="Chat anonymously with people around the world. Safe, simple, and free.">
+    <meta property="twitter:image" content="https://cdn-icons-png.flaticon.com/512/1041/1041916.png">
+
+    <!-- FAVICON (The icon in the browser tab) -->
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/134/134914.png" type="image/png">
+
+    <!-- EXTERNAL LIBS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- LOGIN SCREEN -->
-    <div id="login-screen" class="screen">
-        <div class="card">
+    <!-- 0. CONNECTION BANNER (Hidden) -->
+    <div id="connection-banner" class="hidden">⚠️ Connection Lost. Reconnecting...</div>
+
+    <!-- 1. REJECTION SCREEN -->
+    <div id="rejection-screen" class="hidden">
+        <div class="cartoon-container">
+            <div id="rejection-emoji">👶</div>
+            <h2 id="rejection-text">Go drink your milk!</h2>
+            <p>Reloading...</p>
+        </div>
+    </div>
+
+    <!-- 2. LEGAL MODAL (Hidden) -->
+    <div id="legal-modal" class="hidden">
+        <div class="legal-content">
+            <div id="legal-text"></div>
+            <button id="close-legal">Close</button>
+        </div>
+    </div>
+
+    <!-- 3. LANDING SCREEN -->
+    <div id="landing-screen" class="screen">
+        <div class="wide-container">
+            <div class="landing-header">
+                <h1>🛡️ Global Chat Protocol</h1>
+                <p>Anonymous • Encrypted • Global</p>
+            </div>
+
+            <div class="landing-grid">
+                <!-- RULES -->
+                <div class="rules-section">
+                    <h3>Community Guidelines</h3>
+                    <ul class="rules-list">
+                        <li><i class="fa-solid fa-check"></i> Be respectful to everyone.</li>
+                        <li><i class="fa-solid fa-check"></i> No hate speech or bullying.</li>
+                        <li><i class="fa-solid fa-check"></i> No spamming or selling.</li>
+                        <li><i class="fa-solid fa-check"></i> Do not share personal info.</li>
+                        <li><i class="fa-solid fa-check"></i> No illegal discussions.</li>
+                        <li><i class="fa-solid fa-check"></i> Report bad behavior.</li>
+                        <li><i class="fa-solid fa-check"></i> Have fun!</li>
+                    </ul>
+                    
+                    <div class="verification-area">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="age-check">
+                            <span class="checkmark"></span>
+                            <strong>I verify I am 18+ years old.</strong>
+                        </label>
+                        <button id="enter-site-btn">ENTER CHAT ROOM</button>
+                    </div>
+                </div>
+
+                <!-- ADS -->
+                <div class="ad-section">
+                    <div class="big-ad-slot">
+                        <span>💰 Big Ad Space (300x250) 💰</span>
+                        <div class="ad-subtext">(Place Google AdSense Code Here)</div>
+                    </div>
+                    <div class="big-ad-slot" style="margin-top:20px;">
+                        <span>💰 Second Ad Space 💰</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-info">
+                Owner: Aseem Aishwarya | Contact: aseemaishwarya123@gmail.com
+            </div>
+            
+            <div class="footer">
+                © 2025 Aseem Aishwarya. 
+                <span class="footer-links">
+                    <a href="#" id="link-privacy">Privacy Policy</a> | 
+                    <a href="#" id="link-terms">Terms of Service</a>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. LOGIN SCREEN -->
+    <div id="login-screen" class="screen hidden">
+        <div class="card login-card-expanded">
             <i class="fa-brands fa-whatsapp fa-4x" style="color:#25D366;"></i>
             <h2>Global Chat</h2>
             <div class="badge"><span id="online-count">0</span> Online</div>
             
-            <input type="text" id="username" placeholder="Your Name" maxlength="15">
-            <input type="number" id="age" placeholder="Age">
+            <div class="banner-ad-slot">
+                <span>💰 Top Banner Ad (728x90) 💰</span>
+            </div>
+
+            <div class="form-grid">
+                <input type="text" id="username" placeholder="Your Name" maxlength="15">
+                <input type="number" id="age" placeholder="Age">
+            </div>
             
-            <!-- CRUCIAL: The script needs this ID="country" -->
             <select id="country">
                 <option value="🌍">Select Country</option>
                 <option value="🇮🇳">India 🇮🇳</option>
@@ -39,15 +146,21 @@
             <button id="join-btn">START CHAT</button>
             <p id="status-msg"></p>
         </div>
+        <div class="footer">
+            © 2025 Aseem Aishwarya. 
+            <span class="footer-links">
+                <a href="#" id="link-privacy-2">Privacy</a> | 
+                <a href="#" id="link-terms-2">Terms</a>
+            </span>
+        </div>
     </div>
 
-    <!-- CHAT SCREEN -->
+    <!-- 5. CHAT SCREEN -->
     <div id="chat-screen" class="screen hidden">
         <div class="header">
             <div class="info">
                 <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Avatar">
                 <div>
-                    <!-- The script needs this ID="partner-name" -->
                     <div id="partner-name" style="font-weight:bold;">Stranger</div>
                     <div id="typing-indicator" class="hidden">typing...</div>
                 </div>
@@ -64,7 +177,6 @@
             <div class="sys-msg">Encryption active. Say Hi!</div>
         </div>
 
-        <!-- The script needs this ID="emoji-picker" -->
         <div id="emoji-picker" class="hidden">
             <span>😀</span><span>😂</span><span>🤣</span><span>❤️</span><span>😍</span>
             <span>😭</span><span>😡</span><span>👍</span><span>👎</span><span>🔥</span>
@@ -81,6 +193,7 @@
             <button id="mic-btn"><i class="fa-solid fa-microphone"></i></button>
             <button id="send-btn" style="color:#25D366;"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
+        <div style="text-align:center; font-size:10px; color:#999; padding:2px;">© Aseem Aishwarya</div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
