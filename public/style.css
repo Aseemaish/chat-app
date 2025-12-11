@@ -34,3 +34,43 @@ body { background: #d1d7db; height: 100vh; overflow: hidden; }
 .unblur { filter: blur(0); }
 .recording { color: red !important; animation: pulse 1s infinite; }
 @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+/* ... existing code ... */
+
+/* Update these specific classes */
+
+.message {
+    max-width: 75%;
+    padding: 6px 10px; /* Make it compact */
+    border-radius: 8px;
+    font-size: 14.2px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Container for Time + Tick */
+.msg-meta {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+    margin-left: 10px; /* Push away from text */
+    float: right; /* Keep it to the right */
+}
+
+.msg-time {
+    font-size: 11px;
+    color: #999;
+}
+
+/* The Double Tick Icon */
+.tick {
+    font-size: 11px;
+    color: #53bdeb; /* WhatsApp Blue */
+}
+
+.their-msg .tick {
+    display: none; /* Hide ticks on received messages */
+}
