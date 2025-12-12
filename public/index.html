@@ -1,44 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#008069">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- PRIMARY SEO -->
+    <!-- GOOGLE VERIFICATION CODE SHOULD BE HERE -->
+    
+    <!-- ADSENSE AUTO ADS SCRIPT SHOULD BE HERE (In Head) -->
+
     <title>Global Chat - Talk to Strangers | Free Omegle Alternative</title>
-    <meta name="description" content="Start chatting instantly with random strangers worldwide. No login, 100% anonymous, safe, and free. The best text-only Omegle alternative in 2025.">
-    <meta name="keywords" content="anonymous chat, stranger chat, talk to strangers, random chat, omegle alternative, text chat, global chat, chat online">
-    <meta name="author" content="Aseem Aishwarya">
-    <meta name="robots" content="index, follow"> <!-- Tells Google to scan this site -->
-
-    <!-- OPEN GRAPH / FACEBOOK / WHATSAPP (Makes shared links look good) -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://global-chat-app.onrender.com/">
-    <meta property="og:title" content="Global Chat - Connect with Strangers">
-    <meta property="og:description" content="Met a stranger lately? Join thousands of users in anonymous, encrypted chats. No login required.">
-    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/1041/1041916.png"> <!-- Preview Image -->
-
-    <!-- TWITTER -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://global-chat-app.onrender.com/">
-    <meta property="twitter:title" content="Global Chat - Anonymous Stranger Chat">
-    <meta property="twitter:description" content="Chat anonymously with people around the world. Safe, simple, and free.">
-    <meta property="twitter:image" content="https://cdn-icons-png.flaticon.com/512/1041/1041916.png">
-
-    <!-- FAVICON (The icon in the browser tab) -->
-    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/134/134914.png" type="image/png">
-
-    <!-- EXTERNAL LIBS -->
+    <meta name="description" content="Start chatting instantly with random strangers worldwide. No login required. Safe, free, and random text chat alternative to Omegle.">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- 0. CONNECTION BANNER (Hidden) -->
+    <!-- 0. UTILS -->
     <div id="connection-banner" class="hidden">⚠️ Connection Lost. Reconnecting...</div>
+    <div id="legal-modal" class="hidden">
+        <div class="legal-content">
+            <div id="legal-text"></div>
+            <button id="close-legal">Close</button>
+        </div>
+    </div>
 
     <!-- 1. REJECTION SCREEN -->
     <div id="rejection-screen" class="hidden">
@@ -49,15 +35,7 @@
         </div>
     </div>
 
-    <!-- 2. LEGAL MODAL (Hidden) -->
-    <div id="legal-modal" class="hidden">
-        <div class="legal-content">
-            <div id="legal-text"></div>
-            <button id="close-legal">Close</button>
-        </div>
-    </div>
-
-    <!-- 3. LANDING SCREEN -->
+    <!-- 2. LANDING SCREEN -->
     <div id="landing-screen" class="screen">
         <div class="wide-container">
             <div class="landing-header">
@@ -65,8 +43,8 @@
                 <p>Anonymous • Encrypted • Global</p>
             </div>
 
-            <div class="landing-grid">
-                <!-- RULES -->
+            <!-- Removed the grid layout, centered the rules for a cleaner look -->
+            <div class="rules-container-centered">
                 <div class="rules-section">
                     <h3>Community Guidelines</h3>
                     <ul class="rules-list">
@@ -88,17 +66,26 @@
                         <button id="enter-site-btn">ENTER CHAT ROOM</button>
                     </div>
                 </div>
+            </div>
 
-                <!-- ADS -->
-                <div class="ad-section">
-                    <div class="big-ad-slot">
-                        <span>💰 Big Ad Space (300x250) 💰</span>
-                        <div class="ad-subtext">(Place Google AdSense Code Here)</div>
-                    </div>
-                    <div class="big-ad-slot" style="margin-top:20px;">
-                        <span>💰 Second Ad Space 💰</span>
-                    </div>
-                </div>
+            <!-- SEO CONTENT (Kept for AdSense Approval) -->
+            <div class="seo-content">
+                <h2>The Ultimate Guide to Safe Anonymous Chatting</h2>
+                <p>Welcome to Global Chat, the premier destination for connecting with strangers worldwide. In an era where digital connection is paramount, our platform offers a unique, text-based alternative to video chat services like Omegle. Here is why anonymous chatting is growing and how to stay safe.</p>
+                
+                <h3>Why Choose Text-Only Chat?</h3>
+                <p>Video chats can often be intrusive or require high bandwidth. Text-based chatting allows for a lower-pressure environment where personality shines through before appearance. It removes the anxiety of being on camera and allows for deeper, more meaningful conversations based on shared interests rather than looks.</p>
+
+                <h3>5 Safety Tips for Meeting Strangers Online</h3>
+                <ul>
+                    <li><strong>Never Share PII:</strong> Personally Identifiable Information (PII) like your home address, phone number, or school name should never be shared with a stranger.</li>
+                    <li><strong>Trust Your Instincts:</strong> If a conversation feels uncomfortable or the other person becomes aggressive, disconnect immediately. Our "Next" button is there for your safety.</li>
+                    <li><strong>Report Bad Actors:</strong> We rely on our community to keep the platform clean. Use the report flag icon to alert our system of Terms of Service violations.</li>
+                    <li><strong>Don't Click Links:</strong> If a stranger sends you a link, do not click it. It could be a phishing attempt to steal your data.</li>
+                    <li><strong>Keep it Light:</strong> The best conversations are about hobbies, movies, music, and culture. Avoid heavy political debates or illegal topics.</li>
+                </ul>
+                
+                <p><em>Disclaimer: This service is for entertainment purposes only. Users must be 18 years or older.</em></p>
             </div>
 
             <div class="contact-info">
@@ -115,16 +102,14 @@
         </div>
     </div>
 
-    <!-- 4. LOGIN SCREEN -->
+    <!-- 3. LOGIN SCREEN -->
     <div id="login-screen" class="screen hidden">
         <div class="card login-card-expanded">
             <i class="fa-brands fa-whatsapp fa-4x" style="color:#25D366;"></i>
             <h2>Global Chat</h2>
             <div class="badge"><span id="online-count">0</span> Online</div>
             
-            <div class="banner-ad-slot">
-                <span>💰 Top Banner Ad (728x90) 💰</span>
-            </div>
+            <!-- Removed Yellow Banner Ad Slot -->
 
             <div class="form-grid">
                 <input type="text" id="username" placeholder="Your Name" maxlength="15">
@@ -157,7 +142,7 @@
         </div>
     </div>
 
-    <!-- 5. CHAT SCREEN -->
+    <!-- 4. CHAT SCREEN (No changes needed) -->
     <div id="chat-screen" class="screen hidden">
         <div class="header">
             <div class="info">
