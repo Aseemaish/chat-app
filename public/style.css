@@ -1,14 +1,14 @@
+/* ... Keep all your Reset and Body styles ... */
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
 body { background: #d1d7db; height: 100vh; overflow: hidden; }
 .screen { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; }
 .hidden { display: none !important; }
 
-/* --- 0. UTILS --- */
+/* UTILS (Connection Banner & Legal) */
 #connection-banner { 
     background: #d32f2f; color: white; text-align: center; 
     padding: 8px; position: absolute; top: 0; width: 100%; z-index: 300; font-size: 14px; 
 }
-
 #legal-modal { 
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
     background: rgba(0,0,0,0.8); z-index: 500; display: flex; 
@@ -24,45 +24,28 @@ body { background: #d1d7db; height: 100vh; overflow: hidden; }
     background: #333; color: white; border: none; cursor: pointer;
 }
 
-/* --- 1. REJECTION & LANDING --- */
-#rejection-screen {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: white; z-index: 100;
-    display: flex; align-items: center; justify-content: center;
-    text-align: center;
-}
-.cartoon-container { animation: shake 0.5s; }
-#rejection-emoji { font-size: 100px; display: block; margin-bottom: 20px; }
-#rejection-text { font-size: 28px; color: #d32f2f; margin-bottom: 10px; }
-@keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } 100% { transform: translateX(0); } }
-
+/* LANDING PAGE (Cleaner, No Yellow Boxes) */
 #landing-screen {
     background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
     overflow-y: auto; align-items: center; padding: 20px;
 }
 .wide-container {
-    background: white; width: 100%; max-width: 900px; 
+    background: white; width: 100%; max-width: 800px; 
     border-radius: 15px; padding: 30px; box-shadow: 0 15px 30px rgba(0,0,0,0.3);
     display: flex; flex-direction: column; gap: 20px; position: relative; margin-top: 40px;
 }
 .landing-header { text-align: center; border-bottom: 2px solid #eee; padding-bottom: 20px; }
 .landing-header h1 { color: #2c3e50; font-size: 2.2rem; }
-.landing-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
 
-/* Rules */
-.rules-section h3 { color: #008069; margin-bottom: 15px; }
-.rules-list { list-style: none; padding: 15px; border-radius: 8px; background: #f9f9f9; }
+/* Centered Rules */
+.rules-container-centered {
+    display: flex; justify-content: center; width: 100%;
+}
+.rules-section { width: 100%; max-width: 500px; }
+.rules-section h3 { color: #008069; margin-bottom: 15px; text-align: center; }
+.rules-list { list-style: none; padding: 15px; border-radius: 8px; background: #f9f9f9; border: 1px solid #eee; }
 .rules-list li { margin-bottom: 10px; font-size: 14px; color: #555; display: flex; align-items: center; gap: 10px; }
 .rules-list i { color: #00a884; }
-
-/* Ads */
-.ad-section { display: flex; flex-direction: column; align-items: center; }
-.big-ad-slot {
-    width: 300px; height: 250px; background: #fff9c4; border: 2px dashed #fbc02d;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    color: #f57f17; font-weight: bold; border-radius: 10px; margin-bottom: 20px;
-}
-.ad-subtext { font-size: 10px; margin-top: 5px; opacity: 0.6; }
 
 /* Verification */
 .verification-area { background: #f0f2f5; padding: 15px; border-radius: 10px; text-align: center; margin-top: 20px; }
@@ -74,22 +57,22 @@ body { background: #d1d7db; height: 100vh; overflow: hidden; }
 }
 #enter-site-btn:hover { background: #c0392b; transform: scale(1.02); }
 
+/* SEO Content Section */
+.seo-content { margin-top: 30px; text-align: left; background: #f9f9f9; padding: 20px; border-radius: 10px; border: 1px solid #eee; color: #444; }
+.seo-content h2 { color: #008069; font-size: 1.5rem; margin-bottom: 15px; border-bottom: 2px solid #ddd; padding-bottom: 5px; }
+.seo-content h3 { color: #333; font-size: 1.2rem; margin-top: 20px; margin-bottom: 10px; }
+.seo-content p { font-size: 14px; line-height: 1.6; margin-bottom: 15px; }
+.seo-content ul { list-style-type: disc; padding-left: 20px; margin-bottom: 15px; }
+.seo-content li { margin-bottom: 8px; font-size: 14px; }
+
 /* Footer */
 .contact-info { text-align: center; font-size: 12px; color: #888; border-top: 1px solid #eee; padding-top: 15px; }
 .footer { text-align: center; font-size: 12px; color: #aaa; margin-top: 5px; }
 .footer-links a { color: #008069; text-decoration: none; margin: 0 5px; cursor: pointer; }
 
-/* --- 2. LOGIN & CHAT --- */
+/* Login & Chat Styles (Unchanged from before) */
 #login-screen { justify-content: center; align-items: center; background: #f0f2f5; z-index: 10; }
-.login-card-expanded {
-    background: white; padding: 30px; border-radius: 10px;
-    width: 90%; max-width: 500px; display: flex; flex-direction: column; gap: 15px; text-align: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-.banner-ad-slot {
-    width: 100%; height: 80px; background: #fff9c4; border: 2px dashed #fbc02d;
-    display: flex; align-items: center; justify-content: center; color: #f57f17; font-weight: bold;
-}
+.login-card-expanded { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 500px; display: flex; flex-direction: column; gap: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 .form-grid { display: flex; gap: 10px; }
 .login-card-expanded input, .login-card-expanded select { padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; width: 100%; }
 #join-btn { padding: 15px; background: #00a884; color: white; border: none; font-weight: bold; border-radius: 5px; cursor: pointer; }
@@ -118,4 +101,15 @@ body { background: #d1d7db; height: 100vh; overflow: hidden; }
 .blur-img { filter: blur(10px); cursor: pointer; max-width: 200px; border-radius: 5px; }
 .unblur { filter: blur(0); }
 .recording { color: red !important; animation: pulse 1s infinite; }
-@media (max-width: 700px) { .landing-grid { grid-template-columns: 1fr; } .ad-section { order: -1; } }
+
+/* Rejection */
+#rejection-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: white; z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+}
+.cartoon-container { animation: shake 0.5s; }
+#rejection-emoji { font-size: 100px; display: block; margin-bottom: 20px; }
+#rejection-text { font-size: 28px; color: #d32f2f; margin-bottom: 10px; }
+@keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } 100% { transform: translateX(0); } }
