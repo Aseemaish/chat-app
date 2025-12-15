@@ -101,6 +101,15 @@ body { background: #d1d7db; height: 100vh; overflow: hidden; }
 .blur-img { filter: blur(10px); cursor: pointer; max-width: 200px; border-radius: 5px; }
 .unblur { filter: blur(0); }
 .recording { color: red !important; animation: pulse 1s infinite; }
+/* Custom App Logo on Login Screen */
+.login-logo {
+    width: 80px;        /* Adjust size (80px is similar to fa-4x) */
+    height: 80px;
+    margin-bottom: 15px;
+    border-radius: 18px; /* Makes it a "Squircle" like iOS/Android icons */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Adds a nice floaty shadow */
+    object-fit: cover;
+}
 
 /* Rejection */
 #rejection-screen {
