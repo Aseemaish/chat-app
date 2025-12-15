@@ -102,12 +102,17 @@ body { background: #d1d7db; height: 100vh; overflow: hidden; }
 .unblur { filter: blur(0); }
 .recording { color: red !important; animation: pulse 1s infinite; }
 /* Custom App Logo on Login Screen */
+/* Custom App Logo on Login Screen */
 .login-logo {
-    width: 80px;        /* Adjust size (80px is similar to fa-4x) */
+    width: 80px;
     height: 80px;
-    margin-bottom: 15px;
-    border-radius: 18px; /* Makes it a "Squircle" like iOS/Android icons */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Adds a nice floaty shadow */
+    
+    /* CENTERING MAGIC */
+    display: block;       /* Makes it behave like a block element */
+    margin: 0 auto 15px auto; /* Top:0, Right:Auto, Bottom:15px, Left:Auto */
+    
+    border-radius: 18px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     object-fit: cover;
 }
 
