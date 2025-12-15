@@ -127,3 +127,32 @@ body { background: #d1d7db; height: 100vh; overflow: hidden; }
 #rejection-emoji { font-size: 100px; display: block; margin-bottom: 20px; }
 #rejection-text { font-size: 28px; color: #d32f2f; margin-bottom: 10px; }
 @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } 100% { transform: translateX(0); } }
+/* Ad Layout */
+.landing-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr; /* Rules on left, Ads on right */
+    gap: 30px;
+}
+
+.ad-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.big-ad-slot {
+    width: 300px;
+    height: 250px;
+    /* We removed the yellow background so it looks clean */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+/* Mobile: Stack them (Ads on top or bottom) */
+@media (max-width: 700px) {
+    .landing-grid { grid-template-columns: 1fr; }
+    .ad-section { margin-bottom: 20px; }
+}
